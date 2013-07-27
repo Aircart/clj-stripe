@@ -33,3 +33,24 @@
 (defmethod execute :get-card-token
   [op-data]
   (util/get-request *stripe-token* (str *api-root* "/tokens/" (get op-data "id"))))
+
+(defn create-card
+  "Creates a create-card operation for a customer.
+  Requires a card (see common/card) and the customer ID (see common/customer)."
+  [card customer]
+  (apply util/merge-maps {:operation :create-card} [card customer]))
+
+(defmethod execute :create-card
+  [op-data]
+  (pr (dissoc op-data :operation "customer"))
+  (util/post-request *stripe-token* (str *api-root* "/customers/" (get op-data "customer") "/cards") (dissoc op-data :operation "customer")))
+
+(defn delete-card
+  "Creates an delete-card operation for a customer.
+  Requires the card ID (see common/card) and the customer ID (see common/customer)"
+  [card customer]
+  (apply util/merge-maps {:operation :delete-card} [card customer]))
+
+(defmethod execute :delete-card
+  [op-data]
+  (util/delete-request *stripe-token* (str *api-root* "/customers/" (get op-data "customer") "/cards/" (get op-data "card"))))

@@ -115,7 +115,7 @@
       Optional: address zip code (see zip)
       Optional: address state (see state)
       Optional: address country (see country)"
-	([card-token] {"card" card-token})
+	([card-token] {"card" card-token}) ; also for card-id
 	([number expiration & extra-info] (apply util/merge-maps number expiration extra-info))
 	)
 
